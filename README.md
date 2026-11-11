@@ -38,3 +38,10 @@ All four methods raise `ValueError` if the range is empty or out of bounds. The 
 ## Implementation notes
 
 The tree is stored in four parallel arrays sized `4 * n`, indexed from 1 at the root. `lazy[node]` is `None` when no assignment is pending and an integer otherwise. `None` is used instead of a sentinel because any integer, including `0`, is a valid assigned constant. Queries push pending assignments down before recursing, which keeps the stored aggregates consistent with the leaves at all times.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
